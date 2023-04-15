@@ -26,4 +26,23 @@ export class EmpruntService {
     deletePost(idEmprunt: number){
         return from(this.EmpruntPostRepository.delete(idEmprunt));
     }
+    async search(query: string): Promise<EmpruntPost[]> {
+        const val = parseInt(query, 10)
+        if(isNaN(val)){
+             const emprunt = await this.EmpruntPostRepository
+            .createQueryBuilder('emprunt')
+            .where('emprunt.DateEmprunt ILIKE :query', { query: String(`%${query}%`)})
+            .getMany();
+
+            return emprunt;
+        }else{
+            const emprunt = await this.EmpruntPostRepository
+            .createQueryBuilder('emprunt')
+            .orWhere('emprunt.idEmprunt = :idEmprunt', { idEmprunt: Number(query) })
+            .getMany();
+
+            return emprunt;
+        }
+        
+      }
 }

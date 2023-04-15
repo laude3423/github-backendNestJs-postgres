@@ -26,4 +26,23 @@ export class EmprunteurService {
     deletePost(idEmprunteur: number){
         return from(this.EmprunteurPostRepository.delete(idEmprunteur));
     }
+    async search(query: string): Promise<EmprunteurPost[]> {
+        const val = parseInt(query, 10)
+        if(isNaN(val)){
+             const emprunteur = await this.EmprunteurPostRepository
+            .createQueryBuilder('emprunteur')
+            .where('emprunteur.nomEmprunteur ILIKE :query', { query: String(`%${query}%`)})
+            .getMany();
+
+            return emprunteur;
+        }else{
+            const emprunteur = await this.EmprunteurPostRepository
+            .createQueryBuilder('emprunteur')
+            .orWhere('emprunteur.idEmprunteur = :idEmprunteur', { idEmprunteur: Number(query) })
+            .getMany();
+
+            return emprunteur;
+        }
+        
+      }
 }

@@ -26,11 +26,6 @@ export class LivreService {
     deletePost(idLivre: number){
         return from(this.LivrePostRepository.delete(idLivre));
     }
-    // async findLivre(idLivreOrTitreLivre: string): Promise<LivrePostEntity> {
-    //     return this.LivrePostRepository.findOne({
-    //       where: [{ idLivre: idLivreOrTitreLivre }, { titreLivre: idLivreOrTitreLivre }],
-    //     });
-    //   }
     async search(query: string): Promise<LivrePostEntity[]> {
         const val = parseInt(query, 10)
         if(isNaN(val)){

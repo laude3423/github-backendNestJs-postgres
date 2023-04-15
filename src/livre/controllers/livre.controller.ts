@@ -31,16 +31,11 @@ export class LivreController {
         }
 
     @Get(':idLivreOrTitreLivre')
-    async getUser(@Param('idLivreOrTitreLivre') idLivreOrTitreLivre: string) {
+    async getLivre(@Param('idLivreOrTitreLivre') idLivreOrTitreLivre: string) {
       const livr = await this.LivreService.search(idLivreOrTitreLivre);
       if (!livr) {
-        throw new NotFoundException('User not found');
+        throw new NotFoundException('Livre not found');
       }
       return livr;
     }
-    // @Get('search')
-    // async search(@Query('query') query: string) {
-    //   const users = await this.LivreService.search(query);
-    //   return { results: users };
-    // }
 }

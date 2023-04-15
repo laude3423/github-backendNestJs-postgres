@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, NotFoundException, Get, Param, Post, Put } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { EmprunteurPost } from '../models/post.interface';
 import { EmprunteurService } from '../services/emprunteur.service';
@@ -26,4 +26,12 @@ export class EmprunteurController {
         delete(@Param('idEmprunteur') idEmprunteur:number):Observable<DeleteResult>{
             return this.EmprunteurService.deletePost(idEmprunteur);
         }
+    @Get(':idEmpruntOrNomEmprunteur')
+    async getEmprunteur(@Param('idEmpruntOrNomEmprunteur') idEmpruntOrNomEmprunteur: string) {
+      const emprunteur = await this.EmprunteurService.search(idEmpruntOrNomEmprunteur);
+      if (!emprunteur) {
+        throw new NotFoundException('Emprunteur not found');
+      }
+      return emprunteur;
+    }
 }

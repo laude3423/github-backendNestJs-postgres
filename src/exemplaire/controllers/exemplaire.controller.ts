@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete,NotFoundException, Get, Param, Post, Put } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { ExemplairePost } from '../models/post.interfaces';
 import { ExemplaireService } from '../services/exemplaire.service';
@@ -26,4 +26,12 @@ export class ExemplaireController {
         delete(@Param('idExemplaire') idExemplaire:number):Observable<DeleteResult>{
             return this.ExemplaireService.deletePost(idExemplaire);
         }
+     @Get(':idExemplaireOrDate')
+    async getExeplaire(@Param('idExemplaireOrDate') idExemplaireOrDate: string) {
+      const exempl = await this.ExemplaireService.search(idExemplaireOrDate);
+      if (!exempl) {
+        throw new NotFoundException('Exemplaire not found');
+      }
+      return exempl;
+    }
 }

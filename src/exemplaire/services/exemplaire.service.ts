@@ -27,4 +27,21 @@ export class ExemplaireService {
     deletePost(idExemplaire: number){
         return from(this.ExemplairePostRepository.delete(idExemplaire));
     }
+    async search(query: string): Promise<ExemplairePost[]> {
+        const val = parseInt(query, 10)
+        if(isNaN(val)){
+             const exemple = await this.ExemplairePostRepository
+            .createQueryBuilder('exemplaire')
+            .where('exemplaire.dateAchat ILIKE :query', { query: String(`%${query}%`)})
+            .getMany();
+
+            return exemple;
+        }else{
+            const exemple = await this.ExemplairePostRepository
+            .createQueryBuilder('exemplaire')
+            .orWhere('exemplaire.idExemplaire = :idExemplaire', { idEemplaire: Number(query) })
+            .getMany();
+
+            return exemple;
+        }
 }
